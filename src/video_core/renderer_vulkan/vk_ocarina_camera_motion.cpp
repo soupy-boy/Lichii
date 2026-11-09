@@ -700,13 +700,13 @@ struct OcarinaEffects {
 } // namespace
 
 struct OcarinaUpscaler::Impl {
-    Impl(const Device& device_, Scheduler& scheduler_, DescriptorPool& pool,
+    Impl(const Device& device_, Scheduler& scheduler_, DescriptorPool& descriptor_pool,
          ComputePassDescriptorQueue& queue_, MemoryAllocator& allocator_, StagingBufferPool& staging,
          VideoCommon::OcarinaUpscaleBackend backend)
-        : device{device_}, scheduler{scheduler_}, queue{queue_}, allocator{allocator_}, pool{pool},
-          motion_pass{device, scheduler, pool},
-          color_pass{device, scheduler, pool},
-          output_pass{device, scheduler, pool, OCARINA_DLSS_OUTPUT_COMP_SPV} {
+        : device{device_}, scheduler{scheduler_}, queue{queue_}, allocator{allocator_},
+          pool{descriptor_pool}, motion_pass{device, scheduler, descriptor_pool},
+          color_pass{device, scheduler, descriptor_pool},
+          output_pass{device, scheduler, descriptor_pool, OCARINA_DLSS_OUTPUT_COMP_SPV} {
 #ifdef EGLANTINE_STREAMLINE
         if (backend == VideoCommon::OcarinaUpscaleBackend::Dlss) {
             dlss = std::make_unique<StreamlineDlssUpscaler>(device, scheduler, allocator);
